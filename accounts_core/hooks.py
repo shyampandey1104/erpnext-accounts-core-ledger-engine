@@ -4,7 +4,7 @@
 app_name = "accounts_core"
 app_title = "Erpnext Accounts Core Ledger Engine"
 app_publisher = "Shyamkumar Pandey"
-app_description = "Erpnext Accounts Core Ledger Engine for Frappe and ERPNext"
+app_description = "Erpnext Accounts Core Ledger Engine - Enterprise Multi-DocType Solution for Frappe & ERPNext"
 app_email = "shyampandey1104@gmail.com"
 app_license = "MIT"
 
@@ -16,16 +16,22 @@ app_include_js = "/assets/accounts_core/js/accounts_core.bundle.js"
 # Document Events
 # ---------------
 doc_events = {
-    "DocType Event": {
-        "on_submit": "accounts_core.engine.on_document_submit",
-        "on_cancel": "accounts_core.engine.on_document_cancel"
+    "Erpnext Accounts Core Ledger Engine Entry": {
+        "validate": "accounts_core.services.validator.EnterpriseValidationEngine.validate_compliance_rules",
+        "on_submit": "accounts_core.services.integration_service.EnterpriseIntegrationService.verify_remote_status"
     }
 }
 
-# Scheduled Tasks
-# ---------------
+# Scheduled Background Tasks
+# --------------------------
 scheduler_events = {
+    "hourly": [
+        "accounts_core.tasks.hourly_sync"
+    ],
     "daily": [
-        "accounts_core.engine.daily_scheduled_sync"
+        "accounts_core.tasks.daily_reconciliation"
+    ],
+    "weekly": [
+        "accounts_core.tasks.weekly_digest"
     ]
 }
